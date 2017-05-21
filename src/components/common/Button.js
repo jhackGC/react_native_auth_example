@@ -6,6 +6,8 @@ const Button = ({ onPress, children}) => {
     buttonStyle,
     textStyle } = styles;
 
+  console.log('Logged in BUTTON children:  ', children);
+
   return (
       <TouchableOpacity
           style={buttonStyle}

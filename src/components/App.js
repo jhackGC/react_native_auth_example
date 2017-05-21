@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
-import { Header } from './common';
+import { Header, Button, CardSection } from './common';
 import firebase from 'firebase';
 import LoginForm from './LoginForm';
 
 class App extends Component {
+
+  state = { loggedIn: false };
+
 
   componentWillMount(){
     const firebaseConfig = {
@@ -18,18 +21,45 @@ class App extends Component {
 
     firebase.initializeApp(firebaseConfig);
 
-  }
+    // Event handler for when the user either logs-in or out. To update user
+    // status in App state.
+    // Every time firebase detects that the user is doing some login activity
+    // like firebase.auth().signInWithEmailAndPassword(..), it will propagate
+    // the event AuthStateChanged, and it will be caught by event observers
+    // like here ...
+    firebase.auth().onAuthStateChanged( (user) => {
+        if(user) {
+          this.setState({ loggedIn: true });
+        }else{
+          this.setState({ loggedIn: false });
+        }
+    });
+  };
+
+  renderContent(){
+    if (this.state.loggedIn) {
+      return (
+          <CardSection>
+            <Button>Log Out</Button>
+          </CardSection>
+      )
+    }else{
+      return <LoginForm/>;
+    }
+  };
 
   render() {
     return (
         <View>
           <Header>
-            <Text>Header of AUth</Text>
+            <Text>Authentication</Text>
           </Header>
-          <LoginForm>Hello </LoginForm>
+          {this.renderContent()}
         </View>
     );
-  }
+  };
+
 }
+
 
 export default App;
