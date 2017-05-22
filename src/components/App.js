@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Header, Button, CardSection, Spinner } from './common';
 import firebase from 'firebase';
 import LoginForm from './LoginForm';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from '../reducers';
-import TechStack from '../components/TechStack';
+import Main from '../components/Main';
+import MySpinner from '../components/MySpinner';
 
 class App extends Component {
   state = { loggedIn: null };
@@ -57,24 +56,13 @@ class App extends Component {
 
     switch (this.state.loggedIn) {
       case true:
-        midContent = (
-          <View>
-            <TechStack />
-            <CardSection>
-              <Button onPress={this.logoutUser}>Log Out</Button>
-            </CardSection>
-          </View>
-        );
+        midContent = <Main />;
         break;
       case false:
         midContent = <LoginForm />;
         break;
       default:
-        midContent = (
-          <View style={styles.spinnerContainer}>
-            <Spinner size="large" />
-          </View>
-        );
+        midContent = <MySpinner />;
     }
 
     const content = (
@@ -88,28 +76,11 @@ class App extends Component {
     return content;
   }
 
-  logoutUser() {
-    firebase.auth().signOut();
-  }
+
 
   render() {
-    return (
-      <View>
-        <Header>
-          <Text>Authentication</Text>
-        </Header>
-        {this.renderContent()}
-      </View>
-    );
+    return this.renderContent();
   }
 }
-
-const size = 30; // TODO I want to put some logic in my style creation ...
-
-const styles = StyleSheet.create({
-  spinnerContainer: {
-    marginTop: size,
-  },
-});
 
 export default App;

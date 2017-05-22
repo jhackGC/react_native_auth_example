@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
-import { Card, CardSection, Button, InputField, Spinner } from './common';
+import { Text, View } from 'react-native';
+import { Card, CardSection, Button, InputField, Spinner, Header } from './common';
 import firebase from 'firebase';
 
 class LoginForm extends Component {
@@ -81,32 +81,37 @@ class LoginForm extends Component {
     const { errorTextStyle, successTextStyle } = styles;
 
     return (
-      <Card>
-        <CardSection>
-          <InputField
-            label="Email"
-            onChangeText={email => this.setState({ email })}
-            value={this.state.email}
-            placeholder="user@example.com"
-          />
-        </CardSection>
-        <CardSection>
-          <InputField
-            label="Password"
-            onChangeText={password => this.setState({ password })}
-            value={this.state.password}
-            placeholder="password"
-            secureTextEntry={true}
-          />
-        </CardSection>
+      <View>
+        <Header>
+          <Text>React Tech Stack - LOGIN</Text>
+        </Header>
+        <Card>
+          <CardSection>
+            <InputField
+              label="Email"
+              onChangeText={email => this.setState({ email })}
+              value={this.state.email}
+              placeholder="user@example.com"
+            />
+          </CardSection>
+          <CardSection>
+            <InputField
+              label="Password"
+              onChangeText={password => this.setState({ password })}
+              value={this.state.password}
+              placeholder="password"
+              secureTextEntry={true}
+            />
+          </CardSection>
 
-        <Text style={errorTextStyle}>{this.state.errorMsg}</Text>
-        <Text style={successTextStyle}>{this.state.successMsg}</Text>
+          <Text style={errorTextStyle}>{this.state.errorMsg}</Text>
+          <Text style={successTextStyle}>{this.state.successMsg}</Text>
 
-        <CardSection>
-          {this.renderButton()}
-        </CardSection>
-      </Card>
+          <CardSection>
+            {this.renderButton()}
+          </CardSection>
+        </Card>
+      </View>
     );
   }
 }

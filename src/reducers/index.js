@@ -1,6 +1,7 @@
 //Reducers directory
 import { combineReducers } from 'redux';
+import TechsReducer from './TechsReducer';
 
 export default combineReducers({
-  libraries: () => []
+  techs: TechsReducer
 });
