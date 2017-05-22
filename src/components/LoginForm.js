@@ -1,45 +1,49 @@
-import React, {Component} from 'react';
-import {Text} from 'react-native';
-import {Card, CardSection, Button, InputField, Spinner} from './common';
+import React, { Component } from 'react';
+import { Text } from 'react-native';
+import { Card, CardSection, Button, InputField, Spinner } from './common';
 import firebase from 'firebase';
 
 class LoginForm extends Component {
-
   state = {
     email: '',
     password: '',
     errorMsg: '',
     successMsg: '',
-    loading: false
+    loading: false,
   };
 
-  renderButton(){
+  renderButton() {
     //return spinner or button
-    if (this.state.loading){
-      return <Spinner size="small" />
-    }else{
-
-      return (<Button onPress={this.onButtonPress.bind(this)}>
-        <Text>Log In</Text>
-      </Button>)
+    if (this.state.loading) {
+      return <Spinner size="small" />;
+    } else {
+      return (
+        <Button onPress={this.onButtonPress.bind(this)}>
+          <Text>Log In</Text>
+        </Button>
+      );
     }
   }
 
-  onButtonPress(){
+  onButtonPress() {
     const { email, password } = this.state;
 
     //clear errors , set the loading spinner
     this.setState({ errorMsg: '', loading: true });
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
       .then(this.onLoginSuccess.bind(this))
-      .catch((error) =>{
+      .catch(error => {
         console.log('catch auth: ', error);
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password)
           .then(this.onLoginSuccess.bind(this))
-          .catch(this.onLoginFail.bind(this))
+          .catch(this.onLoginFail.bind(this));
       });
-  };
+  }
 
   onLoginFail(error) {
     //stop the spinner
@@ -47,15 +51,14 @@ class LoginForm extends Component {
 
     const errorMsg = `Authentication failed: ${error.message}`;
 
-
     this.setState({
       loading: false,
       errorMsg: errorMsg,
-      successMsg: ''
+      successMsg: '',
     });
-  };
+  }
 
-  onLoginSuccess(error){
+  onLoginSuccess(error) {
     //clear form input fields
     //clear error messages
     //stop the spinner
@@ -70,64 +73,55 @@ class LoginForm extends Component {
       password: '',
       errorMsg: '',
       loading: false,
-      successMsg: msg
+      successMsg: msg,
     });
-  };
+  }
 
   render() {
-    const {
-      errorTextStyle,
-      successTextStyle } = styles;
+    const { errorTextStyle, successTextStyle } = styles;
 
     return (
-        <Card>
-          <CardSection>
-            <InputField
-                label='Email'
-                onChangeText={ email => this.setState({ email })}
-                value={this.state.email}
-                placeholder='user@example.com'
-            />
-          </CardSection>
-          <CardSection>
-            <InputField
-                label='Password'
-                onChangeText={ password => this.setState({ password })}
-                value={this.state.password}
-                placeholder='password'
-                secureTextEntry={true}
-            />
-          </CardSection>
+      <Card>
+        <CardSection>
+          <InputField
+            label="Email"
+            onChangeText={email => this.setState({ email })}
+            value={this.state.email}
+            placeholder="user@example.com"
+          />
+        </CardSection>
+        <CardSection>
+          <InputField
+            label="Password"
+            onChangeText={password => this.setState({ password })}
+            value={this.state.password}
+            placeholder="password"
+            secureTextEntry={true}
+          />
+        </CardSection>
 
-          <Text
-            style={errorTextStyle}
-          >{this.state.errorMsg}</Text>
-          <Text
-              style={successTextStyle}
-          >{this.state.successMsg}</Text>
+        <Text style={errorTextStyle}>{this.state.errorMsg}</Text>
+        <Text style={successTextStyle}>{this.state.successMsg}</Text>
 
-          <CardSection>
-            {this.renderButton()}
-          </CardSection>
-        </Card>
+        <CardSection>
+          {this.renderButton()}
+        </CardSection>
+      </Card>
     );
   }
 }
 
-
-
-const styles ={
+const styles = {
   errorTextStyle: {
     color: 'red',
     fontSize: 15,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   successTextStyle: {
     color: 'grey',
     fontSize: 15,
-    alignSelf: 'center'
-  }
-
+    alignSelf: 'center',
+  },
 };
 
 export default LoginForm;
